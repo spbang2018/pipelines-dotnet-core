@@ -20,19 +20,19 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
-    command: build
+    command: 'build'
     projects: '**/*.csproj'
-    arguments: '--configuration Release' # Update this to match your need
+    arguments: '--configuration Release'
 - task: DotNetCoreCLI@2
   displayName: 'Install dotnetsay'
   inputs:
-    command: custom
-    custom: tool
+    command: 'custom'
+    custom: 'tool'
     arguments: 'install -g dotnetsay'
     
 - task: DotNetCoreCLI@2
   inputs:
-    command: test
+    command: 'test'
     projects: '**/*Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
@@ -40,20 +40,12 @@ steps:
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
-    testRunner: VSTest
+    testResultsFormat: 'VSTest'
     testResultsFiles: '**/*.trx'
 
 - task: DotNetCoreCLI@2
   inputs:
-    command: publish
-    publishWebProjects: True
+    command: 'publish'
+    publishWebProjects: true
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    zipAfterPublish: True
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: publish
-    publishWebProjects: True
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    zipAfterPublish: True
 
